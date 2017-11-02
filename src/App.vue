@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
+    <keep-alive>
     <router-view/>
+    </keep-alive>
   </div>
 </template>
 
@@ -13,4 +15,7 @@ export default {
 
 <style lang="stylus">
   @import "~common/stylus/index"
+  #app 
+    width: 100%
+    height: 100%
 </style>

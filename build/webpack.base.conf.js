@@ -28,6 +28,7 @@ module.exports = {
       'api': resolve('src/api'),
       'common': resolve('src/common'),
       'base': resolve('src/base'),
+      'filter': resolve('src/filter'),
     }
   },
   module: {

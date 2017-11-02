@@ -6,6 +6,7 @@
                 :class="{'active': index+1===currentPage}"
                 :key="index"
                 @click="setPage(index+1)">{{title}}
+                <div class="tab-bar" :class="{'tactive': index+1===currentPage}"></div>
             </li>
         </ul>
         <!-- decide if bind touchstart -->
@@ -129,6 +130,7 @@
                 this.slideEls = this.$refs['tabswiper-wrap'].children;
                 this.dragging = true;
                 this.setPage(this.currentPage);
+                console.log('tabcurpage', this.currentPage)
                 let _this = this;
                 setTimeout(() => {
                     _this.dragging = _this.invisible = false;
@@ -292,7 +294,7 @@
     width: 100%;
     height: 100%;
     transition: all 0.5s ease;
-    flex-direction: row;
+    /*flex-direction: row;*/
 }
 .tabswiper-wrap.dragging{
     transition: none;
@@ -319,6 +321,7 @@
     position: absolute;
     height: 45px;
     line-height: 45px;
+    color: #ccc;
     -webkit-tap-highlight-color:rgba(0,0,0,0);
     /*display: table;*/
     margin: 0 auto;
@@ -344,8 +347,8 @@
 }
 .tab-title{
     -webkit-appearance:none;
-    height: 35px;
-    line-height: 35px;
+    height: 45px;
+    line-height: 45px;
     position: relative;
     text-align: center;
     cursor: pointer;
@@ -360,11 +363,24 @@
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1;
-    /*    display: block;*/
+    transition: all 0.5s ease;
+}
+.tab-bar{
+  position:absolute;
+  bottom: 0;
+  z-index: 10;
+  width: 60%;
+  height: 0px;
+  margin-left:20%;
+  transition: all 0.5s ease;
+}
+.tab-bar.tactive{
+    background: #ef4238;
+    height:3px;
 }
 .tab-title.active,.tab-title:active {
-    border-bottom: 2px solid #36acf4;
-    color: #36acf4;
+  /*border-bottom: 2px solid #ef4238;*/
+  color: #ef4238;
 }
 
 

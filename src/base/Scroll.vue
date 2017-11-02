@@ -1,16 +1,6 @@
 <template>
-  <div class="list-wrapper">
-    <div class="panel-header">
-      <span class="panel_title">{{title}}</span>
-      <span class="panel_more" @click="gotoMoviePage">全部部</span>
-    </div>
-    <div class="scroll-content" ref="wrapper">
-        <ul ref="list" class="list-content">
-          <li @click="clickItem($event,item)" class="list-item" v-for="item in data">
-          <a href=""><img :src="item.images.large"></a>
-          </li>
-        </ul>
-  </div>
+  <div class="list-wrapper" ref="wrapper">
+    <slot></slot>
   </div>
 </template>
 
@@ -61,28 +51,30 @@
     },
     mounted() {
       setTimeout(() => {
-        this._initDom()
         this._initScroll()
       }, 20)
     },
     methods: {
-      _initDom () {
-        let parent = this.$refs.list
-        let children = parent.children
-        let children_width = children[0].clientWidth
-        let width = children.length * children_width
-        parent.style.width = width + 10 + 'px'
-      },
       _initScroll() {
         if (!this.$refs.wrapper) {
           return
         }
+        let scrollDirectionX = this.direction===DIRECTION_H ? true : false
+        let pullUpLoad
+        if (this.pullup){
+          pullUpLoad = {
+            threshold: 50
+          }
+        }
+
         this.scroll = new BScroll(this.$refs.wrapper, {
           // probeType: this.probeType,
           // click: this.click,
-          scrollX: true,
-        })
+          scrollX: scrollDirectionX,
+          scrollY: !scrollDirectionX,
+          pullUpLoad: pullUpLoad
 
+        })
         if (this.listenScroll) {
           let me = this
           this.scroll.on('scroll', (pos) => {
@@ -93,6 +85,7 @@
         if (this.pullup) {
           this.scroll.on('scrollEnd', () => {
             if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+              console.log('下拉')
               this.$emit('scrollToEnd')
             }
           })
@@ -118,10 +111,10 @@
       },
       scrollToElement() {
         this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
-      },
-      gotoMoviePage() {
-        this.$router.push({path: '/movies'})
       }
+      // gotoMoviePage() {
+      //   this.$router.push({path: '/movies'})
+      // }
     },
     watch: {
       data() {
@@ -136,35 +129,5 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .list-wrapper
-    // height: 170px
-    padding:0 15px
-    .panel-header
-      height: 60px
-      line-height: 60px
-      .panel_title
-        font-size: 13px
-        font-weight: 800
-      .panel_more
-        float: right
-        font-size: 12px
-    .scroll-content
-      overflow:hidden
-      .list-content
-        position: relative
-        z-index: 10
-        background: #fff
-        padding-right: 10px
-        height:170px
-        .list-item
-          height: 150px
-          width: 120px
-          font-size: 18px
-          padding-right:10px
-          margin-bottom: 10px
-          float: left
-          a
-            display:block
-            img
-              width:100%
-              height:100%
+    overflow:hidden
 </style>
