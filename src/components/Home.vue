@@ -1,66 +1,69 @@
 <template>
-<div class="container" v-if="scrollMovieH.length && scrollMovieC.length">
-  <scroll direction="DIRECTION_V" :data="scrollMovieH">
-    <div style="height: 100%">
-      <div v-if="sliderMovie.length" class="slider-wrapper" ref="sliderWrapper">
-        <slider :loop="false">
-          <div v-for="item in sliderMovie">
-            <a :href="item.alt">
-              <img class="needsclick" :src="item.images.small">
-            </a>
+<transition name="home">
+<div class="home">
+  <div class="container" v-if="scrollMovieH.length && scrollMovieC.length">
+    <search v-show="showSearch" @pclear="goBackIndex"></search>
+    <div v-show="!showSearch">
+      <div class="index_header" :class="{change: isChange}">
+        <span class="city" @click="goToCityList">{{cityname}}</span>
+        <div class="in-con">
+          <i class="icon iconfont">&#xe632;</i>
+          <input id="search" @click="searchMovie" type="text" placeholder="找影视剧、影人">
+        </div>
+      </div>
+      <div class="h">
+        <scrollv 
+          :data="scrollMovieH" 
+          :listenScroll="true"
+          :probe-type="3"
+          @scroll="scroll">
+          <div class="list_vertical">
+            <div v-if="sliderMovie && sliderMovie.length" class="slider-wrapper" ref="sliderWrapper">
+              <slider>
+                <div v-for="item in sliderMovie">
+                  <a :href=" '/movie/' + item.id" >
+                    <img class="needsclick" src="../common/images/2.jpg">
+                  </a>
+                </div>
+              </slider>
+            </div>
+            <scroll 
+              :data="scrollMovieH" 
+              v-if="scrollMovieH.length" 
+              flag="hot"
+              :buy="true"
+              :count="movieh_count"
+              title="正在热映">
+              </scroll>
+            <scroll 
+              :data="scrollMovieC" 
+              v-if="scrollMovieC.length" 
+              flag="coming"
+              :buy="false"
+              :count="moviec_count"
+              title="即将上映">
+              </scroll>
           </div>
-        </slider>
+        </scrollv>
       </div>
-      <div class="scroll_container" v-if="scrollMovieH.length">
-        <div class="panel-header">
-          <span class="panel_title">正在热映</span>
-          <span class="panel_more" @touchend="goToMovie('hot')">全部{{movieh_count}}部</span>
-        </div>
-        <scroll
-          :data="scrollMovieH"
-        >
-          <ul ref="listH" class="list-content clearfix">
-            <li class="list-item" v-for="item in scrollMovieH" @touchend="goToDetail(item.id)">
-              <a href=""><img :src="item.images.small"></a>
-              <div class="list-text">
-                <div class="list-title">{{item.title}}</div>
-                <button>购票</button>
-            </div>
-            </li>
-          </ul>
-       </scroll>
-      </div>
-      <div class="scroll_container" v-if="scrollMovieC.length">
-        <div class="panel-header">
-          <span class="panel_title">即将上映</span>
-          <span class="panel_more" @touchend="goToMovie('coming')">全部{{moviec_count}}部</span>
-        </div>
-        <scroll
-          :data="scrollMovieC"
-        >
-          <ul ref="listC" class="list-content clearfix">
-            <li class="list-item" v-for="item in scrollMovieC">
-            <a href=""><img :src="item.images.small"></a>
-            <div class="list-text">
-              <div class="list-title">{{item.title}}</div>
-              <span></span>
-            </div>
-            </li>
-          </ul>
-       </scroll>
-      </div>
+      <mfooter></mfooter>
     </div>
-  </scroll>
-  <mfooter></mfooter>
+    </div>
+  <div v-show="loading"><loading></loading></div>
 </div>
+
+</transition>
 </template>
 
 <script>
 import Slider from 'base/Slider'
 import Scroll from 'base/Scroll'
+import Scrollv from 'base/Scrollv'
+import Loading from 'base/Loading'
 import Mfooter from 'base/Mfooter'
+import Search from 'components/Search'
 import { _getComingSoon, _getHot } from 'api/movie'
-import {mapMutations} from 'vuex'
+import {mapMutations, mapState} from 'vuex'
 export default {
   data () {
     return {
@@ -70,7 +73,10 @@ export default {
       scrollMovieH: [],
       scrollMovieHall: [],
       moviec_count: 0,
-      movieh_count: 0
+      movieh_count: 0,
+      showSearch: false,
+      isChange: false,
+      loading: true
     }
   },
   methods: {
@@ -79,45 +85,63 @@ export default {
         this.scrollMovieCall = res.subjects
         this.moviec_count = res.total
         this.sliderMovie = res.subjects.slice(0, 5)
-        this.scrollMovieC = res.subjects.slice(0, 10)
-        this.getMovieHot(res.subjects)
+        this.scrollMovieC = res.subjects
+        this.setComMovie(this.sliderMovie)
+        this.loading = false
         // this.$nextTick(function () {
         //   this._initDom('listC')
         // })
       })
     },
     getHot () {
-      _getHot().then((res) => {
+      let query = 'city=' + this.cityname
+      _getHot(query).then((res) => {
+        console.log('res', res)
         this.scrollMovieHall = res.subjects
         this.movieh_count = res.total
-        this.scrollMovieH = res.subjects.slice(0, 10)
-        this.getMovieSoon(res.subjects)
+        this.scrollMovieH = res.subjects
         // this.$nextTick(function () {
         //   this._initDom('listH')
         // })
       })
     },
-    // _initDom (el) {
-    //   let parent = this.$refs[el]
-    //   console.log('el===', el)
-    //   console.log('parent===', parent)
-    //   let children = parent.children
-    //   let childrenW = children[0].clientWidth
-    //   let width = children.length * childrenW
-    //   console.log('children===', parent.children)
-    //   console.log('length===', children.length)
-    //   parent.style.width = width + 10 + 'px'
-    // },
-    goToMovie (flag) {
-      this.$router.push({path: '/movies', query: { flag: flag }})
+    goToCityList () {
+      this.$router.push({ path: `/city-list` })
     },
-    goToDetail (id) {
-      this.$router.push({path: `/movie/${id}`})
+    searchMovie () {
+      this.showSearch = true
+    },
+    goBackIndex () {
+      this.showSearch = false
+    },
+    scroll (pos) {
+      if (-pos.y > 60) {
+        this.isChange = true
+      } else if (-pos.y < 30) {
+        this.isChange = false
+      }
     },
     ...mapMutations([
-      'getMovieHot',
-      'getMovieSoon'
+      'setComMovie',
+      'setRouterActive'
     ])
+  },
+  watch: {
+    cityname (newName, oldName) {
+      console.log('newName', newName, oldName)
+      if (newName !== oldName) {
+        this.getComingSoon()
+        this.getHot()
+      }
+    }
+  },
+  computed: {
+    ...mapState([
+      'cityname'
+    ])
+  },
+  activated () {
+    this.setRouterActive(1)
   },
   created () {
     this.getComingSoon()
@@ -128,13 +152,19 @@ export default {
   components: {
     Slider,
     Scroll,
-    Mfooter
+    Mfooter,
+    Scrollv,
+    Search,
+    Loading
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
+.home-enter-active
+  transition: opacity .3s
+.home-enter, .home-leave-to
+  opacity: 0
 .container
   width: 100%
   height: 100%
@@ -144,59 +174,55 @@ export default {
   width: 100%
   height: 150px
   overflow: hidden
-.panel-header
-      height: 60px
-      line-height: 60px
-      .panel_title
-        font-size: 13px
-        font-weight: 800
-      .panel_more
-        float: right
-        font-size: 12px
-.scroll_container
-  padding: 0 10px
-  margin-bottom: 20px
-.scroll-content
-  overflow:hidden
-.list-content
-  position: relative
-  z-index: 10
-  background: #fff
-  // padding-right: 10px
-  // height:170px
-  width: 1200px
-  .list-item
-    // height: 150px
-    width: 120px
-    font-size: 18px
-    padding-right:10px
-    margin-bottom: 10px
-    float: left
-    a
-      display:block
-      height: 150px
-      width: 100%
-      img
-        width:100%
-        height:100%
-    .list-text
-      .list-title
-        font-size: 12px
-        overflow: hidden
-        white-space: nowrap
-        text-overflow: ellipsis
-        margin: 15px 0
-      button
-        color: #fff
-        padding: 5px 10px
-        border-radius: 20px
-        background: #ef4238
-        border: none
-.clearfix:after
-  content:''
-  display: block
-  clear:both
-  visibility: hidden
-  height:0
-
+.index_header
+  position: fixed
+  z-index: 100
+  top: 0
+  width: 100%
+  padding: 20px 20px 10px
+  font-size: 12px
+  // background: #ef4238
+  // background: rgba(0,0,0,0.3)
+  background: rgba(255,255,255,0)
+  transition: background 0.5s linear
+  display: flex
+  &.change
+    background: #ef4238
+    .city
+      background:rgba(255,255,255,0.1)
+  .city
+    color: #fff
+    display: inline-block
+    height: 30px
+    line-height: 30px
+    padding: 0 8px
+    border-radius: 15px
+    background: rgba(108, 108, 108, 0.68)
+    flex: 0 0 70px
+    margin-right: 10px
+    text-align: center
+  .in-con
+    flex: 1
+    height: 30px
+    position: relative
+    .icon
+      position: absolute
+      top: 8px
+      left: 3px
+      color:#9D9D9D
+  #search
+    height: 100%
+    width: 100%
+    line-height: 30px
+    border-radius: 15px
+    padding-left: 22px
+    &::placeholder
+      color: #9D9D9D
+.h
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 50px
+  overflow: hidden
 </style>

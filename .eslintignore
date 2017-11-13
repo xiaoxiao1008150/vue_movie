@@ -2,3 +2,4 @@ build/*.js
 config/*.js
 src/base/*.vue
 src/filter/*.js
+src/common/js/*.js

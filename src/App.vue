@@ -9,7 +9,12 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  mounted () {
+    document.addEventListener('touchstart', (e) => {
+      e.preventDefault()
+    }, false)
+  }
 }
 </script>
 
@@ -18,4 +23,5 @@ export default {
   #app 
     width: 100%
     height: 100%
+    overflow: hidden
 </style>

@@ -15,7 +15,6 @@
   import BScroll from 'better-scroll'
 
   export default {
-    name: 'slider',
     props: {
       loop: {
         type: Boolean,
@@ -68,8 +67,6 @@
     methods: {
       _setSliderWidth (isResize) {
         this.children = this.$refs.sliderGroup.children
-        // console.log('children', this.children)
-        // console.log('length', this.children.length)
         let width = 0
         let sliderWidth = this.$refs.slider.clientWidth
         for (let i = 0; i < this.children.length; i++) {

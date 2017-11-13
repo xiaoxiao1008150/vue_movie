@@ -160,6 +160,7 @@
                 }
             },
             setPage(page) {
+              console.log('this.page', this.currentPage)
               // 把当前页面值储存起来
                 this.lastPage = this.currentPage;
               // 给当前页面重新赋值

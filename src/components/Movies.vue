@@ -2,28 +2,31 @@
   <div class="container">
     <tab :tabtitles="tabtitles" 
     :curPage="curPage">
-    <scroll direction="DIRECTION_V" :pullup="true" @scrollToEnd="loadMore('hot')" :data="scrollMovieHall" >
+    <scrollv :pullup="true" @scrollToEnd="loadMore('hot')" :data="scrollMovieHall" >
       <div class="tab-content-container">
         <div class="tab_flex" v-for="item in scrollMovieHall">
-          <div class="d_left">
-            <img :src="item.images.small">
-          </div>
-          <div class="d_right">
-            <div class="d_right_first">
-              <div class="d_title">{{item.title}}</div>
-              <div class="d_casts"><span>主演:{{item.casts[0].name}}</span></div>
-              <div class="d_rating"><span>评分:{{item.rating.average===0 ?  '暂无评分' : item.rating.average}}</span></div>
+          <router-link :to=" '/movie/' + item.id">
+            <div class="d_left">
+              <img :src="item.images.small">
             </div>
-            <div class="d_right_second"><button>购票</button></div>
-          </div>
+            <div class="d_right">
+              <div class="d_right_first">
+                <div class="d_title">{{item.title}}</div>
+                <div class="d_casts"><span>主演:{{item.casts[0].name}}</span></div>
+                <div class="d_rating"><span>评分:{{item.rating.average===0 ?  '暂无评分' : item.rating.average}}</span></div>
+              </div>
+              <div class="d_right_second"><button>购票</button></div>
+            </div>
+            </router-link>
         </div>
-        <div v-show="loading" class="m_loading"><loading></loading></div>
+        <div v-show="loading" class="m_nodata">正在加载...</div>
         <div v-show="noData" class="m_nodata">没有数据了</div>
       </div>
-    </scroll>
-    <scroll direction="DIRECTION_V" :pullup="true" @scrollToEnd="loadMore('coming')" :data="scrollMovieCall" >
+    </scrollv>
+    <scrollv :pullup="true" @scrollToEnd="loadMore('coming')" :data="scrollMovieCall" >
       <div class="tab-content-container">
         <div class="tab_flex" v-for="item in scrollMovieCall">
+          <router-link :to=" '/movie/' + item.id">
           <div class="d_left">
             <img :src="item.images.small">
           </div>
@@ -40,11 +43,12 @@
             </div>
             <div class="d_right_second"><button>购票</button></div>
           </div>
+          </router-link>
         </div>
-        <div v-show="loading" class="m_loading"><loading></loading></div>
+        <div v-show="loading" class="m_nodata">正在加载...</div>
         <div v-show="noData1" class="m_nodata">没有数据了</div>
       </div>
-    </scroll>
+    </scrollv>
     </tab>
     <mfooter></mfooter>
   </div>
@@ -52,9 +56,10 @@
 <script>
 import Mfooter from 'base/Mfooter'
 import Loading from 'base/Loading'
-import Scroll from 'base/Scroll'
+import Scrollv from 'base/Scrollv'
 import Tab from 'base/Tab'
 import { _getComingSoon, _getHot } from 'api/movie'
+import {mapState, mapMutations} from 'vuex'
 export default {
   data () {
     return {
@@ -72,8 +77,7 @@ export default {
     getComingSoon (flag) {
       let query
       if (flag) {
-        this.start1 += 20
-        // console.log('start1==', this.start1)
+        this.start1 += 10
         if (this.start1 >= this.total1) {
           this.noData1 = true
           return
@@ -85,10 +89,8 @@ export default {
       _getComingSoon(query).then((res) => {
         if (!this.scrollMovieCall.length) {
           this.scrollMovieCall = res.subjects
-          // console.log('coming==', this.scrollMovieCall)
           this.count1 = res.count
           this.start1 = res.start
-          // console.log('res.start1==', this.start1)
           this.total1 = res.total
           this.loading = false
         } else {
@@ -102,18 +104,24 @@ export default {
       //  说明是下拉下载的
       let query
       if (flag) {
-        this.start += 20
+        this.start += 10
         if (this.start >= this.total) {
           // this.stopLoad = true
           this.noData = true
           return
         } else {
-          query = `start=${this.start}`
+          query = 'city=' + this.cityname + '&start=' + this.start
         }
+      } else {
+        query = 'city=' + this.cityname
       }
+      console.log('query', query)
       this.loading = true
       _getHot(query).then((res) => {
+        console.log('scrollMovieHall', this.scrollMovieHall)
+        console.log('resHOt====', res)
         if (!this.scrollMovieHall.length) {
+          console.log('res', res)
           this.scrollMovieHall = res.subjects
           // console.log('hot==', this.scrollMovieHall)
           this.count = res.count
@@ -128,41 +136,80 @@ export default {
     },
     loadMore (flag) {
       if (flag === 'hot') {
-        // console.log('get hot movie')
         this.getHot(true)
       } else if (flag === 'coming') {
-        // console.log('get coming movie')
         this.getComingSoon(true)
+      }
+    },
+    resetData () {
+      this.scrollMovieHall = []
+      this.count = 0
+      this.start = 0
+      this.total = 0
+      this.noData = false
+    },
+    ...mapMutations([
+      'setRouterActive'
+    ])
+  },
+  computed: {
+    ...mapState([
+      'cityname'
+    ])
+  },
+  watch: {
+    cityname (newname, oldname) {
+      console.log('哈哈')
+      if (newname !== oldname) {
+        this.isReset = true
       }
     }
   },
   created () {
+    this.init = true
+    this.getHot()
+    this.getComingSoon()
+  },
+  activated () {
+    // this.isReset = false
+    // console.log('testac ==== ', this.isDestory)
     let query = this.$route.query.flag
     if (query === 'coming') {
       this.curPage = 2
     } else {
       this.curPage = 1
     }
-    this.getHot()
-    this.getComingSoon()
+    console.log('page', this.curPage)
+    this.setRouterActive(2)
+    if (this.isReset) {
+      this.resetData()
+      this.getHot()
+      this.getComingSoon()
+    }
+  },
+  deactivated () {
+    if (this.isReset) {
+      this.isReset = false
+    }
   },
   components: {
     Mfooter,
     Tab,
-    Scroll,
+    Scrollv,
     Loading
   }
-  // filters: {
-  //   truncate
-  // }
 }
 </script>
 <style lang="stylus" scoped>
 .tab-content-container
-  padding: 10px 10px 50px 10px
+  padding: 10px 10px 40px 10px
   .tab_flex
-    display: flex
+    // display: flex
     // align-items: center;
+    a
+      display: flex
+      width: 100%
+      height: 100%
     .d_left
       flex: 0 0 80px
       margin: 15px 0
@@ -217,8 +264,6 @@ export default {
   text-align: center
   span
     flex-grow: 1
-.m_loading
-  padding: 10px
 .m_nodata
   text-align : center
   padding: 15px 0

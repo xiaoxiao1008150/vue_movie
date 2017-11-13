@@ -1,7 +1,9 @@
+import {loadSearch} from 'common/js/storage'
 
 const state = {
-  movie_hot: [],
-  movie_soon: []
+  cityname: '上海',
+  com_movie: [],
+  routerActive: 1,
+  search_history: loadSearch()
 }
-
 export default state
