@@ -34,14 +34,13 @@
     position: absolute
     z-index: 100
     bottom: 0
-    background: pink
     height: 50px
     line-height: 50px
     width: 100%
     text-align:center
     .item_wrapper
       display: flex
-      border-1px(#e0e0e0)
+      bordert-1px(#e0e0e0)
       background: #fcfcfc;
       color: #ef4238
       height: 50px

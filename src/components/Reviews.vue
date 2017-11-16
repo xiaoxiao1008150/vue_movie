@@ -1,6 +1,7 @@
 <template>
-<transition name="review">
-  <div class="container reviews">
+<div style="height:100%">
+  <transition name="review">
+  <div class="container reviews" v-if="latestReviews.length">
      <scrollv :pullup="true" 
               @scrollToEnd="loadMore(id,true)" 
               :listen-scroll="true"
@@ -8,7 +9,7 @@
               :probe-type="3"
               class="test"
               :data="latestReviews">
-      <div class="reviews_wrapper">
+      <div class="reviews_wrapper" >
         <div class="all_reviews" v-if="total">所有评论({{total}}条)</div>
         <div class="top_reviews" v-if="reviews.length" ref="top">
             <div class="t_header"><span>热门短评</span></div>
@@ -18,7 +19,7 @@
           <div class="t_header"><span>最新短评</span></div>
           <comments :reviews="latestReviews"></comments>
         </div>
-          <div v-show="loading" class="m_nodata">正在加载中...</div>
+          <div v-show="sloading" class="m_nodata">正在加载中...</div>
           <div v-show="noData" class="m_nodata">没有数据了</div>
       </div>
     </scrollv>
@@ -27,6 +28,8 @@
       </div>
   </div>
 </transition>
+  <loading v-show="initloading"></loading>
+  </div>
 </template>
 <script>
 import Comments from 'base/Comments'
@@ -44,7 +47,8 @@ export default {
       total: 0,
       count: 0,
       start: 0,
-      loading: false,
+      initloading: true,
+      sloading: false,
       noData: false,
       scrollY: -1,
       currentIndex: '',
@@ -66,7 +70,10 @@ export default {
           query = `start=${this.start}`
         }
       }
-      this.loading = true
+      if (!this.initloading) {
+        this.sloading = true
+      }
+      // this.loading = true
       _getMovieReviews(id, query).then((res) => {
         if (!this.latestReviews.length) {
           this.reviews = res.reviews
@@ -74,10 +81,22 @@ export default {
           this.total = res.total
           this.count = res.count
           this.start = res.start
-          this.loading = false
+          // this.loading = false
+          if (this.initloading) {
+            this.initloading = false
+          }
+          if (this.sloading) {
+            this.sloading = false
+          }
         } else {
           this.latestReviews = this.latestReviews.concat(res.reviews)
-          this.loading = false
+          // this.loading = false
+          if (this.initloading) {
+            this.initloading = false
+          }
+          if (this.sloading) {
+            this.sloading = false
+          }
         }
       })
     },

@@ -84,7 +84,7 @@ export default {
       this.loading = true
       _getInfo(key)
         .then((res) => {
-          if (!res.length) {
+          if (!res.subjects.length) {
             this.noData = true
             return
           }

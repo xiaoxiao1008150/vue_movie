@@ -11,9 +11,9 @@
 export default {
   name: 'app',
   mounted () {
-    document.addEventListener('touchstart', (e) => {
-      e.preventDefault()
-    }, false)
+    document.addEventListener('touchstart', (event) => {
+      event.preventDefault()
+    }, { passive: false })
   }
 }
 </script>

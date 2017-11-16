@@ -1,14 +1,17 @@
 <template>
+  <div style="height:100%"
+    @touchstart="onShortcutTouchStart" 
+    @touchmove="onShortcutTouchMove"
+    >
 <transition name="detail">
-<!-- <div> -->
     <div class="container d-container" v-if="movie" ref="movie">
       <div class="info-header" :class="{change: isChange}">
           <div class="init" v-show="!isChange"><span>电影</span></div>
-          <div class="second" v-show="isChange">
+          <div class="second" v-show="isChange" >
             <span class="icon" @click="goToback"><i class="iconfont">&#xe603;</i></span>
             <span class="current-movie">{{currentMovie}}</span>
           </div>
-        </div>
+      </div>
         <scrollv 
           :data="reviews"
           :listenScroll="true" 
@@ -67,22 +70,24 @@
               <p class="header">短评</p>
               <comments :reviews="reviews"></comments>
             </div>
-            <div class="all_reviews">
-              <span @touchend="goToReviews(id)">查看全部{{ reviewsLength }}条短评 ></span>
+            <div class="all_reviews" @touchend="goToReviews(id)">
+              <span>查看全部{{ reviewsLength }}条短评 ></span>
+            </div>
+            <div class="" style="visibility:hidden;height: 40px">
             </div>
           </div>
-          </div>
+        </div>
         </scrollv>
     </div>
+</transition>
     <div v-show="loading"><loading></loading></div>
-<!-- </div> -->
-  </transition>
+  </div>
 </template>
 <script>
 import Scroll from 'base/Scroll'
 import Loading from 'base/Loading'
 import Scrollv from 'base/Scrollv'
-
+// import {getData} from 'common/js/dom'
 // import Star from 'base/star/Star'
 import Comments from 'base/Comments'
 import { _getSingleMovie, _getMoviePhotoes, _getMovieReviews } from 'api/movie'
@@ -104,6 +109,27 @@ export default {
     }
   },
   methods: {
+    onShortcutTouchStart (e) {
+      let firstTouch = e.touches[0]
+      this.touch.x1 = firstTouch.pageX
+      this.touch.y1 = firstTouch.pageY
+    },
+    onShortcutTouchMove (e) {
+      let firstTouch = e.touches[0]
+      this.touch.x2 = firstTouch.pageX
+      this.touch.y2 = firstTouch.pageY
+      let delta = (this.touch.x2 - this.touch.x1)
+      let deltaY = (this.touch.y2 - this.touch.y1)
+      // 如果 scrollY的距离小于50 而且 delta的距离大于50 的话 就认为时要退回上一页，但是有一个注意点是起始滑动的水平距离必须是手机边缘的点，暂定位this.touch.y1 >=0 <=80
+      if (Math.abs(deltaY) >= 50) {
+        return
+      }
+      if (this.touch.x1 >= 0 && this.touch.x1 <= 80 && delta >= 50) {
+        this.goToback()
+      }
+      // let anchorIndex = parseInt(this.touch.anchorIndex) + delta
+      // this._scrollTo(anchorIndex)
+    },
     getSingleMovie (id) {
       this.loading = true
       _getSingleMovie(id)
@@ -153,6 +179,7 @@ export default {
       }
     },
     scroll (pos) {
+      this.scrollY = pos.y
       if (-pos.y > 60) {
         this.isChange = true
       } else if (-pos.y < 30) {
@@ -161,7 +188,7 @@ export default {
     }
   },
   created () {
-    console.log('ch', this.needHeight)
+    this.touch = {}
     this.currentMovie = ''
     this.id = this.$route.params.id
     this.getSingleMovie(this.id)
@@ -180,7 +207,7 @@ export default {
   @import "~common/stylus/mixin"
 .detail-enter-active, .detail-leave-active
   transform: translate3d(0, 0, 0)
-  transition: transform .3s
+  transition: transform .5s linear
 .detail-enter
   transform: translate3d(100%, 0, 0)
 .spread-enter-active, .spread-leave-active
@@ -190,13 +217,14 @@ export default {
  .spread-leave-active
   transition: opacity 0s
 .detail-scroll
-  padding-bottom: 40px
 .d-container
   height: 100%
   background: rgba(229, 229, 229, 0.36)
 .d_wrapper
   margin-bottom: 10px
   background: #fff
+  &:last-child
+    margin-bottom: 40px
 .d_wrapper_first
   color: #999
   font-size: 12px
@@ -212,28 +240,32 @@ export default {
     color: #fff
     font-size: 11px
     transition: all 0.5s linear
-    // border-1px(transparent)
-    &.change
-      background: #fff
-      border-1px(#ADADAD)
-    .init
-      span
-        background: rgba(255,255,255,0.3)
-        padding: 5px 15px
-        border-radius: 2px
+    // border-1px(pink)
+    // &.change
+    // .init
+    //   span
+    //     // background: rgba(255,255,255,0.3)
+    //     // padding: 5px 15px
+    //     // border-radius: 2px
     .second
       position: absolute
+      z-index: 1000
       width: 100%
+      height: 100%
       text-align: center
       font-size: 16px;
       color: #000
+      background: #fff
+      border-1px(#ADADAD)
       .icon
         position: absolute
+        z-index: 10001
         left: 0
         width: 80px
         color:#df2d2d
       .current-movie
         position: absolute
+        z-index: 1000
         width: 100%
         padding: 0 80px
         top:0
@@ -305,6 +337,7 @@ export default {
     height: 45px
     line-height: 45px
     font-size: 13px
+    padding: 0 10px
   .comments
     li
       display: flex

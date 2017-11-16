@@ -22,7 +22,8 @@
               <slider>
                 <div v-for="item in sliderMovie">
                   <a :href=" '/movie/' + item.id" >
-                    <img class="needsclick" src="../common/images/2.jpg">
+                    <img class="needsclick" :src="item.images.small">
+                    <!-- <img class="needsclick" src="../common/images/2.jpg"> -->
                   </a>
                 </div>
               </slider>

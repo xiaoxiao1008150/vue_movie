@@ -9,7 +9,7 @@
           <ul class="list-content clearfix" ref="ul">
             <li class="list-item" v-for="item in data" @click="goToDetail(item.id)">
               <a href="">
-                <img>
+                <img :src="item.images.small">
                 <div class="wish"><span>{{item.rating && item.rating.average ? '观众评' + item.rating.average : ''}}</span></div>
               </a>
               <div class="list-text">
@@ -28,12 +28,12 @@
         </div>
         <div class="list_wrapper" ref="list">
           <ul class="list-content clearfix" ref="ul" v-if="photoes">
-            <li class="list-item" v-for="item in data" @click="goToDetail(item.id)">
+            <li class="list-item" v-for="item in data">
               <a  :style="styleObject" href=""><img  :src="item.cover"></a>
             </li>
           </ul>
           <ul class="list-content clearfix" ref="ul" v-else>
-            <li class="list-item" v-for="item in data" @click="goToDetail(item.id)">
+            <li class="list-item" v-for="item in data">
               <a href=""><img :src="item.avatars.small"></a>
               <div class="list-text">
                 <div class="list-title">{{item.name}}</div>
