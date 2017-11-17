@@ -152,7 +152,6 @@
         img
           display: block
           width: 100%
-          height: 100%
     .dots
       position: absolute
       right: 0
