@@ -1,9 +1,9 @@
 <template>
   <div class="t-container">
-    <div class="tab_flex" v-for="item in searchResult">
-      <router-link :to=" '/item/' + item.id">
+    <div class="tab_flex" v-for="item in searchResult" @click="goToDetail(item.id)">
+      <a href=''>
         <div class="d_left">
-          <img :src="item.images.small">
+          <img :src="item.images.small ? item.images.small : '' ">
         </div>
         <div class="d_right">
           <div class="d_right_first">
@@ -13,7 +13,7 @@
           </div>
           <div class="d_right_second"><span>{{item.rating.average}}</span>分</div>
         </div>
-        </router-link>
+        </a>
     </div>
   </div>
 </template>
@@ -25,6 +25,11 @@
         default () {
           return []
         }
+      }
+    },
+    methods: {
+      goToDetail (id) {
+        this.$router.push({path: `/movie/${id}`})
       }
     }
   }

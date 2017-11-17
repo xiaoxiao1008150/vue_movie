@@ -23,8 +23,8 @@
                 <div class="info-con">
                   <p class="title">{{movie.title}}</p>
                   <p class="genres">{{movie.genres.join(',')}}</p>
-                  <p class="country">{{movie.countries[0]}}/{{movie.durations[0]}}</p>
-                  <p class="pubdate">{{movie.mainland_pubdate}}大陆上映</p>
+                  <p class="country">{{ movie.countries ? movie.countries[0] : ''}}/{{ movie.durations ? movie.durations[0] : ''}}</p>
+                  <p class="pubdate">{{movie.mainland_pubdate ? movie.mainland_pubdate : ''}}大陆上映</p>
                   <p class="wish">{{movie.wish_count}}人想看</p>
                 </div>
                 <div class="im-con">

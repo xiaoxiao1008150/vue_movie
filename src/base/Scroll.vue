@@ -9,7 +9,7 @@
           <ul class="list-content clearfix" ref="ul">
             <li class="list-item" v-for="item in data" @click="goToDetail(item.id)">
               <a href="">
-                <img :src="item.images.small">
+                <img :src="item.images.item ? item.images.small : '' ">
                 <div class="wish"><span>{{item.rating && item.rating.average ? '观众评' + item.rating.average : ''}}</span></div>
               </a>
               <div class="list-text">
@@ -127,12 +127,12 @@
     methods: {
       _initDom () {
         let parent = this.$refs.ul
-        let children = parent.children
-        // console.log('parent===', parent)
-        // console.log('childre===', children)
-        let childrenW = children[0].clientWidth
-        let width = children.length * childrenW
-        parent.style.width = width + 10 + 'px'
+        if (parent) {
+          let children = parent.children
+          let childrenW = children[0].clientWidth
+          let width = children.length * childrenW
+          parent.style.width = width + 10 + 'px'
+        }
       },
       _initScroll() {
         if (!this.$refs.list) {

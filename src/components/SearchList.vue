@@ -59,6 +59,7 @@
         _getInfo(keyword, query).then((res) => {
           if (!this.searchResult.length) {
             this.searchResult = res.subjects
+            console.log('test', res)
             this.total = res.total
             this.count = res.count
             this.start = res.start
