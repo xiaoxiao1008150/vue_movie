@@ -7,10 +7,8 @@ import store from './store'
 import * as filters from 'filter'
 import fastclick from 'fastclick'
 import VueLazyload from 'vue-lazyload'
-import Share from 'vue-social-share'
 import 'common/stylus/index.styl'
 
-Vue.use(Share)
 Vue.use(VueLazyload, {
   loading: require('common/images/default.jpeg')
 })

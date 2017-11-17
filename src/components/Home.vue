@@ -97,7 +97,6 @@ export default {
     getHot () {
       let query = 'city=' + this.cityname
       _getHot(query).then((res) => {
-        console.log('res', res)
         this.scrollMovieHall = res.subjects
         this.movieh_count = res.total
         this.scrollMovieH = res.subjects
