@@ -112,6 +112,9 @@
       },
       scrollToElement() {
         this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+      },
+      stop () {
+        this.scroll && this.scroll.stop()
       }
     },
     watch: {

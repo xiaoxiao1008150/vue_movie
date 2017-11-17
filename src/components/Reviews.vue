@@ -8,8 +8,8 @@
               @scroll="scroll"
               :probe-type="3"
               class="test"
-              :data="latestReviews">
-      <div class="reviews_wrapper" >
+              :data="latestReviews" ref="reviews">
+      <div class="reviews_wrapper" @touchstart="stopScroll">
         <div class="all_reviews" v-if="total">所有评论({{total}}条)</div>
         <div class="top_reviews" v-if="reviews.length" ref="top">
             <div class="t_header"><span>热门短评</span></div>
@@ -57,6 +57,10 @@ export default {
     }
   },
   methods: {
+    stopScroll () {
+      let el = this.$refs.reviews
+      el.stop()
+    },
     getMovieReviews (id, flag) {
       let query
       // 说明是下拉加载的
@@ -113,7 +117,6 @@ export default {
       this.listHeight.push(h)
       this.listHeight.push(topH)
       this.listHeight.push(lastestH + topH)
-      console.log('test', this.listHeight)
     },
     scroll (pos) {
       this.scrollY = pos.y

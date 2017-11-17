@@ -10,8 +10,8 @@
     <scrollv :pullup="true" 
               @scrollToEnd="loadMore(keyword, true)" 
               :listen-scroll="listenScroll"
-              :data="searchResult">
-        <display-box :searchResult="searchResult"></display-box>
+              :data="searchResult" ref="searchList">
+        <display-box :searchResult="searchResult" @touchstart.native="stopScroll"></display-box>
     </scrollv>
         <div v-show="sloading" class="m_nodata">正在加载...</div>
         <div v-show="noData" class="m_nodata">没有数据了</div>
@@ -32,19 +32,20 @@
       }
     },
     methods: {
+      stopScroll () {
+        let el = this.$refs.searchList
+        el.stop()
+      },
       goBack () {
         this.$router.go(-1)
       },
       searchInfo (keyword, flag) {
-        console.log('flag', flag)
         let query
         // 说明是下拉加载的
         if (flag) {
           this.start += 10
-          console.log('start', this.start)
           if (this.start >= this.total) {
             this.noData = true
-            console.log('noData', this.noData)
             return
           } else {
             query = `start=${this.start}`
@@ -90,7 +91,6 @@
       this.noData = false
       this.listenScroll = true
       this.keyword = this.$route.params.key
-      console.log('key', this.keyword)
       this.searchInfo(this.keyword, false)
     },
     deactivated () {

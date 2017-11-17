@@ -112,7 +112,6 @@ export default {
     this.length = 0
     this.keyWord = ''
     this.$watch('query', debounce((newQuery) => {
-      console.log('query', newQuery)
       if (!newQuery) {
         return
       }

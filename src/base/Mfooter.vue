@@ -10,7 +10,7 @@
       </router-link>
     </div>
     <div class="item">
-      <router-link to="/movies" :class="{active: routerActive===2}">
+      <router-link to="/movies?flag=hot" :class="{active: routerActive===2}">
       <i class="iconfont">&#xe635;</i>
       <span>电影</span>
       </router-link>

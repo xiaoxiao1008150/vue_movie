@@ -63,7 +63,7 @@ import {mapState, mapMutations} from 'vuex'
 export default {
   data () {
     return {
-      curPage: 1,
+      curPage: 2,
       'tabtitles': ['正在热映', '即将上映'],
       scrollMovieCall: [],
       scrollMovieHall: [],
@@ -95,7 +95,6 @@ export default {
           this.loading = false
         } else {
           this.scrollMovieCall = this.scrollMovieCall.concat(res.subjects)
-          // console.log('cMovie---', this.scrollMovieCall)
           this.loading = false
         }
       })
@@ -115,15 +114,10 @@ export default {
       } else {
         query = 'city=' + this.cityname
       }
-      console.log('query', query)
       this.loading = true
       _getHot(query).then((res) => {
-        console.log('scrollMovieHall', this.scrollMovieHall)
-        console.log('resHOt====', res)
         if (!this.scrollMovieHall.length) {
-          console.log('res', res)
           this.scrollMovieHall = res.subjects
-          // console.log('hot==', this.scrollMovieHall)
           this.count = res.count
           this.start = res.start
           this.total = res.total
@@ -159,7 +153,6 @@ export default {
   },
   watch: {
     cityname (newname, oldname) {
-      console.log('哈哈')
       if (newname !== oldname) {
         this.isReset = true
       }
@@ -171,15 +164,12 @@ export default {
     this.getComingSoon()
   },
   activated () {
-    // this.isReset = false
-    // console.log('testac ==== ', this.isDestory)
     let query = this.$route.query.flag
     if (query === 'coming') {
       this.curPage = 2
     } else {
       this.curPage = 1
     }
-    console.log('page', this.curPage)
     this.setRouterActive(2)
     if (this.isReset) {
       this.resetData()

@@ -55,7 +55,7 @@
       <div class="list-fixed" ref="fixed" v-show="fixedTitle">
         <div class="fixed-title">{{fixedTitle}}</div>
       </div>
-      <test v-show="showCancle"></test>
+      <test v-show="showCancle" ref="mask"></test>
     </scrollv>
   </div>
 </transition>
@@ -112,15 +112,24 @@
       // reset
       this.showCitySearchResult = false
       this.citySearchResult = []
-      console.log('ok')
       this.$watch('cname', debounce((newCityname) => {
-        console.log('query', newCityname)
         if (newCityname) {
           this.searchCity(newCityname)
         }
       }, 500))
     },
     methods: {
+      addEvent (flag) {
+        let el = this.$refs.mask.$el
+        if (flag) {
+          el.removeEventListener('touchstart', () => {})
+        }
+        el.addEventListener('touchstart', (event) => {
+          event.preventDefault()
+          event.stopPropagation()
+        },
+          { passive: false })
+      },
       focus (e) {
         this.showCancle = true
         this.addEvent()
@@ -129,6 +138,7 @@
         }, 300)
       },
       cancel () {
+        this.addEvent(true)
         this.showCancle = false
         this.showCitySearchResult = false
         this.citySearchResult = []
@@ -136,17 +146,12 @@
       },
       searchCity (name) {
         this.citySearchResult = pinyinEngine.query(name)
-        console.log('a', this.citySearchResult)
         this.showCitySearchResult = true
-        // if ()
       },
       getCityName (e) {
         let name = e.target
-        // console.log('target', e.target.tagName)
-        // console.log('xiao', e.target.tagName.toLowerCase())
         if (name && name.tagName.toLowerCase() === 'li') {
           let ns = name.innerHTML.trim()
-          console.log('KKDSDSD', ns)
           this.setCityName(ns)
           this.selectCityDone()
         }
@@ -203,9 +208,6 @@
     },
     activated () {
       this.cancel()
-      document.addEventListener('touchstart', () => {
-        console.log('hh')
-      })
     },
     mounted () {
       setTimeout(() => {
@@ -232,7 +234,6 @@
         }
         // 当滚动到底部，且-newY大于最后一个元素的上限
         this.currentIndex = listHeight.length - 2
-        // console.log('index==', this.currentIndex)
       },
       diff (newVal) {
         let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0

@@ -130,7 +130,6 @@
                 this.slideEls = this.$refs['tabswiper-wrap'].children;
                 this.dragging = true;
                 this.setPage(this.currentPage);
-                console.log('tabcurpage', this.currentPage)
                 let _this = this;
                 setTimeout(() => {
                     _this.dragging = _this.invisible = false;
@@ -160,7 +159,14 @@
                 }
             },
             setPage(page) {
-              console.log('this.page', this.currentPage)
+              // 即将上映
+              let flag
+              if (this.currentPage === 1) {
+                flag = 'coming'
+              } else if (this.currentPage === 2) {
+                flag = 'hot'
+              }
+              this.$router.push({path: '/movies', query: { flag: flag }})
               // 把当前页面值储存起来
                 this.lastPage = this.currentPage;
               // 给当前页面重新赋值

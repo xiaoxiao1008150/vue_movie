@@ -41,11 +41,9 @@ export default {
     search (item) {
       // let info = e.target && e.target.children[0].innerHTML
       this.saveSearch(item)
-      console.log('li')
       this.$emit('search', item)
     },
     delateSearchWord (item) {
-      console.log('icon')
       this.delateSearch(item)
     },
     ...mapMutations([

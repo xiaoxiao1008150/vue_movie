@@ -3,83 +3,83 @@
     @touchstart="onShortcutTouchStart" 
     @touchmove="onShortcutTouchMove"
     >
-<transition name="detail">
-    <div class="container d-container" v-if="movie" ref="movie">
-      <div class="info-header" :class="{change: isChange}">
-          <div class="init" v-show="!isChange"><span>电影</span></div>
-          <div class="second" v-show="isChange" >
-            <span class="icon" @click="goToback"><i class="iconfont">&#xe603;</i></span>
-            <span class="current-movie">{{currentMovie}}</span>
-          </div>
-      </div>
-        <scrollv 
-          :data="reviews"
-          :listenScroll="true" 
-          :probe-type="3"
-          @scroll="scroll" class="detail-scroll">
-        <div>
-          <div class="d_wrapper d_wrapper_first" >
-            <div class="info">
-              <div class="info-con">
-                <p class="title">{{movie.title}}</p>
-                <p class="genres">{{movie.genres.join(',')}}</p>
-                <p class="country">{{movie.countries[0]}}/{{movie.durations[0]}}</p>
-                <p class="pubdate">{{movie.mainland_pubdate}}大陆上映</p>
-                <p class="wish">{{movie.wish_count}}人想看</p>
-              </div>
-              <div class="im-con">
-                <router-link class="icon" tag="div" to="">
-                  <i class="iconfont">&#xe625;</i>
-                  <img :src="movie.trailers ? movie.trailers[0].medium : '' ">
-                </router-link>
-              </div>
+  <transition name="detail">
+      <div class="container d-container" v-if="movie" ref="movie">
+        <div class="info-header" :class="{change: isChange}">
+            <div class="init" v-show="!isChange"><span>电影</span></div>
+            <div class="second" v-show="isChange" >
+              <span class="icon" @click="goToback"><i class="iconfont">&#xe603;</i></span>
+              <span class="current-movie">{{currentMovie}}</span>
             </div>
-            <div class="summary">
-              <div class="s_content" ref="scontent" :class="{ nheight: needHeight, toggle: istoggle }" >
-                <span>
-                  {{ movie.summary}}
-                </span>
-              </div>
-              <div class="s_toggle" @touchend="toggle" v-if="isSpread">
-                <transition name="spread" mode="in-out">
-                  <i class="iconfont" v-show="!istoggle">&#xe604;</i>
-                </transition>
-                <transition name="spread" mode="in-out">
-                 <i class="iconfont" v-show="istoggle">&#xe6ac;</i>
-                </transition>
-              </div>
-            </div>
-          </div>
-          <div class="d_wrapper" v-if="casts.length" >
-            <scroll 
-                :data="casts" 
-                :detail="false"
-                title="演职人员">
-            </scroll>
-          </div>
-          <div class="d_wrapper" v-if="photoes.length">
-            <scroll 
-                :data="photoes" 
-                :detail="false"
-                :photoes="true"
-                title="剧照">
-            </scroll>
-          </div>
-          <div class="d_wrapper" v-if="reviews.length">
-            <div class="comments_container">
-              <p class="header">短评</p>
-              <comments :reviews="reviews"></comments>
-            </div>
-            <div class="all_reviews" @touchend="goToReviews(id)">
-              <span>查看全部{{ reviewsLength }}条短评 ></span>
-            </div>
-            <div class="" style="visibility:hidden;height: 40px">
-            </div>
-          </div>
         </div>
-        </scrollv>
-    </div>
-</transition>
+          <scrollv 
+            :data="reviews"
+            :listenScroll="true" 
+            :probe-type="3"
+            @scroll="scroll" class="detail-scroll">
+          <div>
+            <div class="d_wrapper d_wrapper_first" >
+              <div class="info">
+                <div class="info-con">
+                  <p class="title">{{movie.title}}</p>
+                  <p class="genres">{{movie.genres.join(',')}}</p>
+                  <p class="country">{{movie.countries[0]}}/{{movie.durations[0]}}</p>
+                  <p class="pubdate">{{movie.mainland_pubdate}}大陆上映</p>
+                  <p class="wish">{{movie.wish_count}}人想看</p>
+                </div>
+                <div class="im-con">
+                  <router-link class="icon" tag="div" to="">
+                    <i class="iconfont">&#xe625;</i>
+                    <img :src="movie.trailers ? movie.trailers[0].medium : '' ">
+                  </router-link>
+                </div>
+              </div>
+              <div class="summary">
+                <div class="s_content" ref="scontent" :class="{ nheight: needHeight, toggle: istoggle }" >
+                  <span>
+                    {{ movie.summary}}
+                  </span>
+                </div>
+                <div class="s_toggle" @touchend="toggle" v-if="isSpread">
+                  <transition name="spread" mode="in-out">
+                    <i class="iconfont" v-show="!istoggle">&#xe604;</i>
+                  </transition>
+                  <transition name="spread" mode="in-out">
+                   <i class="iconfont" v-show="istoggle">&#xe6ac;</i>
+                  </transition>
+                </div>
+              </div>
+            </div>
+            <div class="d_wrapper" v-if="casts.length" >
+              <scroll 
+                  :data="casts" 
+                  :detail="false"
+                  title="演职人员">
+              </scroll>
+            </div>
+            <div class="d_wrapper" v-if="photoes.length">
+              <scroll 
+                  :data="photoes" 
+                  :detail="false"
+                  :photoes="true"
+                  title="剧照">
+              </scroll>
+            </div>
+            <div class="d_wrapper" v-if="reviews.length">
+              <div class="comments_container">
+                <p class="header">短评</p>
+                <comments :reviews="reviews"></comments>
+              </div>
+              <div class="all_reviews" @touchend="goToReviews(id)">
+                <span>查看全部{{ reviewsLength }}条短评 ></span>
+              </div>
+              <div class="" style="visibility:hidden;height: 40px">
+              </div>
+            </div>
+          </div>
+          </scrollv>
+      </div>
+  </transition>
     <div v-show="loading"><loading></loading></div>
   </div>
 </template>
@@ -87,8 +87,6 @@
 import Scroll from 'base/Scroll'
 import Loading from 'base/Loading'
 import Scrollv from 'base/Scrollv'
-// import {getData} from 'common/js/dom'
-// import Star from 'base/star/Star'
 import Comments from 'base/Comments'
 import { _getSingleMovie, _getMoviePhotoes, _getMovieReviews } from 'api/movie'
 export default {
@@ -127,8 +125,6 @@ export default {
       if (this.touch.x1 >= 0 && this.touch.x1 <= 80 && delta >= 50) {
         this.goToback()
       }
-      // let anchorIndex = parseInt(this.touch.anchorIndex) + delta
-      // this._scrollTo(anchorIndex)
     },
     getSingleMovie (id) {
       this.loading = true
@@ -158,7 +154,6 @@ export default {
         })
     },
     toggle (e) {
-      // let el = this.$refs.scontent
       this.istoggle = !this.istoggle
       e.preventDefault()
       e.stopPropagation()
@@ -382,4 +377,12 @@ export default {
   text-align: center
   font-size: 13px
   color: #e7382d
+.share
+  position: absolute
+  z-index: 2000
+  bottom: 0
+  left: 0
+  width: 100%
+  padding: 10px
+  background: #fff
 </style>

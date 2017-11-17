@@ -7,8 +7,13 @@ import store from './store'
 import * as filters from 'filter'
 import fastclick from 'fastclick'
 import VueLazyload from 'vue-lazyload'
-
+import Share from 'vue-social-share'
 import 'common/stylus/index.styl'
+
+Vue.use(Share)
+Vue.use(VueLazyload, {
+  loading: require('common/images/default.jpeg')
+})
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {
@@ -19,9 +24,6 @@ Vue.config.productionTip = false
 
 fastclick.attach(document.body)
 
-Vue.use(VueLazyload, {
-  loading: require('common/images/default.jpeg')
-})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
