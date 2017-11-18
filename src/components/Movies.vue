@@ -63,7 +63,7 @@ import {mapState, mapMutations} from 'vuex'
 export default {
   data () {
     return {
-      curPage: 2,
+      curPage: 1,
       'tabtitles': ['正在热映', '即将上映'],
       scrollMovieCall: [],
       scrollMovieHall: [],
@@ -143,12 +143,14 @@ export default {
       this.noData = false
     },
     ...mapMutations([
-      'setRouterActive'
+      'setRouterActive',
+      'setSwitch'
     ])
   },
   computed: {
     ...mapState([
-      'cityname'
+      'cityname',
+      'switch'
     ])
   },
   watch: {
@@ -167,8 +169,10 @@ export default {
     let query = this.$route.query.flag
     if (query === 'coming') {
       this.curPage = 2
+      this.setSwitch(2)
     } else {
       this.curPage = 1
+      this.setSwitch(1)
     }
     this.setRouterActive(2)
     if (this.isReset) {

@@ -128,7 +128,6 @@ export default {
   },
   watch: {
     cityname (newName, oldName) {
-      console.log('newName', newName, oldName)
       if (newName !== oldName) {
         this.getComingSoon()
         this.getHot()

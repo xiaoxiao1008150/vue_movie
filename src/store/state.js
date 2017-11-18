@@ -5,6 +5,7 @@ const state = {
   com_movie: [],
   current_movie: '',
   routerActive: 1,
+  switch: 1,
   search_history: loadSearch()
 }
 export default state

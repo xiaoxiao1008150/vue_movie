@@ -36,6 +36,7 @@
 </template>
 
 <script type="text/babel">
+import {mapMutations,mapState} from 'vuex'
 
     const JUDGE_INITIAL = 0
     const JUDGE_SLIDEING = 1
@@ -103,6 +104,10 @@
         watch: {
             curPage: function (val) {
                 this.setPage(val)
+                // this.setSwitch(val)
+            },
+            switch: function (newVal) {
+                this.setPage(newVal)
             }
         },
         data() {
@@ -139,6 +144,13 @@
                 }
             })
         },
+        computed: {
+          ...mapState([
+            'switch'
+          ]),
+        },
+        activated () {
+        },
         methods: {
             next() {
                 var page = this.currentPage;
@@ -160,13 +172,14 @@
             },
             setPage(page) {
               // 即将上映
-              let flag
-              if (this.currentPage === 1) {
-                flag = 'coming'
-              } else if (this.currentPage === 2) {
-                flag = 'hot'
-              }
-              this.$router.push({path: '/movies', query: { flag: flag }})
+                let flag
+                if (page === 1) {
+                  flag = 'hot'
+                } else if (page === 2) {
+                  flag = 'coming'
+                }
+                this.$router.push({path: '/movies', query: { flag: flag }})
+                this.setSwitch(page)
               // 把当前页面值储存起来
                 this.lastPage = this.currentPage;
               // 给当前页面重新赋值
@@ -275,7 +288,10 @@
             },
             _isPageChanged() {
                 return this.lastPage !== this.currentPage;
-            }
+            },
+            ...mapMutations([
+              'setSwitch'
+            ])
         }
     };
 </script>

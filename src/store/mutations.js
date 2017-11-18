@@ -10,6 +10,9 @@ const mutations = {
   setCurrentMovie (state, movie) {
     state.current_movie = movie
   },
+  setSwitch (state, val) {
+    state.switch = val
+  },
   saveSearch (state, searchword) {
     state.search_history = saveSearch(searchword)
   },
