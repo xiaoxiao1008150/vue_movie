@@ -34,13 +34,13 @@ npm run dev
 ## 部分效果演示
 ### 热映和即将上映电影模块入口，电影详情和评论
 
-![image](https://github.com/xiaoxiao1008150/vue-douban-movie/raw/master/screenshot/movie.gif)
-![image](https://github.com/xiaoxiao1008150/vue-douban-movie/raw/master/screenshot/detail.gif)
+![image](https://github.com/xiaoxiao1008150/vue_movie/raw/master/screenshot/movie.gif)
+![image](https://github.com/xiaoxiao1008150/vue_movie/raw/master/screenshot/detail.gif)
 
 ### 城市搜索和相关影人、电影搜索
 
-![image](https://github.com/xiaoxiao1008150/vue-douban-movie/raw/master/screenshots/search_city.gif)
-![image](https://github.com/xiaoxiao1008150/vue-douban-movie/raw/master/screenshots/search_people.gif)
+![image](https://github.com/xiaoxiao1008150/vue_movie/raw/master/screenshot/search_city.gif)
+![image](https://github.com/xiaoxiao1008150/vue_movie/raw/master/screenshot/search_people.gif)
 
 ## 项目描述
 ### 技术栈
