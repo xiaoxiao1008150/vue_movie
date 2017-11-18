@@ -7,7 +7,7 @@ class="result-wrapper"
     <div  v-if="searchResult.length">
       <display-box :searchResult="searchResult" class="no-padding"></display-box>
         <div class="s-result" v-show="length" @click="goToSearchR">查看{{length}}条影视剧结果</div>
-        <div style="height:60px"></div>
+        <div v-show="length" style="height:60px"></div>
     </div>
   </div>
 </scrollv>
@@ -51,7 +51,7 @@ class="result-wrapper"
   .no-padding
     padding-top: 0
   .search-result
-    padding: 20px
+    padding: 0 20px
     border-top: 1px ssolid #f6f6f6
     border-bottom: 1px ssolid #f6f6f6
     background: #fff
