@@ -187,13 +187,16 @@ export default {
       'setCurrentMovie'
     ])
   },
-  created () {
+  activated () {
     this.touch = {}
     this.currentMovie = ''
     this.id = this.$route.params.id
     this.getSingleMovie(this.id)
     this.getMoviePhotoes(this.id)
     this.getMovieReviews(this.id)
+  },
+  deactivated () {
+    this.$destroy()
   },
   components: {
     Scroll,
