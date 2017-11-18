@@ -88,6 +88,7 @@ import Scroll from 'base/Scroll'
 import Loading from 'base/Loading'
 import Scrollv from 'base/Scrollv'
 import Comments from 'base/Comments'
+import {mapMutations} from 'vuex'
 import { _getSingleMovie, _getMoviePhotoes, _getMovieReviews } from 'api/movie'
 export default {
   data () {
@@ -132,6 +133,7 @@ export default {
         .then((res) => {
           this.movie = res
           this.currentMovie = res.title
+          this.setCurrentMovie(res.title)
           this.casts = res.directors.concat(res.casts)
           this.loading = false
           this.$nextTick(() => {
@@ -180,7 +182,10 @@ export default {
       } else if (-pos.y < 30) {
         this.isChange = false
       }
-    }
+    },
+    ...mapMutations([
+      'setCurrentMovie'
+    ])
   },
   created () {
     this.touch = {}

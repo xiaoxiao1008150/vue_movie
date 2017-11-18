@@ -7,6 +7,9 @@ const mutations = {
   setComMovie (state, movie) {
     state.com_movie = movie
   },
+  setCurrentMovie (state, movie) {
+    state.current_movie = movie
+  },
   saveSearch (state, searchword) {
     state.search_history = saveSearch(searchword)
   },

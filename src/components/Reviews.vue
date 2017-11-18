@@ -2,6 +2,12 @@
 <div style="height:100%">
   <transition name="review">
   <div class="container reviews" v-if="latestReviews.length">
+     <div class="info-header">
+            <div class="second" >
+              <span class="icon" @click="goToback"><i class="iconfont">&#xe603;</i></span>
+              <span class="current-movie">短评{{current_movie}}</span>
+            </div>
+        </div>
      <scrollv :pullup="true" 
               @scrollToEnd="loadMore(id,true)" 
               :listen-scroll="true"
@@ -37,6 +43,7 @@ import Scrollv from 'base/Scrollv'
 // import Sticky from 'base/Sticky'
 import Loading from 'base/Loading'
 import { _getMovieReviews } from 'api/movie'
+import {mapState} from 'vuex'
 
 // const TITLE_HEIGHT = 30
 export default {
@@ -120,6 +127,9 @@ export default {
     },
     scroll (pos) {
       this.scrollY = pos.y
+    },
+    goToback () {
+      this.$router.go(-1)
     }
   },
   computed: {
@@ -128,7 +138,10 @@ export default {
         return ''
       }
       return this.titleList[this.currentIndex] ? this.titleList[this.currentIndex] : ''
-    }
+    },
+    ...mapState([
+      'current_movie'
+    ])
   },
   watch: {
     latestReviews () {
@@ -173,6 +186,7 @@ export default {
 }
 </script>
 <style scoped lang="stylus">
+  @import "~common/stylus/mixin"
 .review-enter-active, .review-leave-active
   transform: translate3d(0, 0, 0)
   transition: transform .5s
@@ -183,6 +197,7 @@ export default {
   width: 100%
   height: 100%
   overflow: hidden
+  margin-top: 60px
 .reviews
   height: 100%
   .reviews_wrapper
@@ -198,7 +213,7 @@ export default {
   padding-bottom: 50px
 .list-fixed
       position: absolute
-      top: 0
+      top: 60px
       left: 0
       z-index: 1000
       width: 100%
@@ -221,4 +236,46 @@ export default {
   padding: 15px 0
   color: #999
   font-size: 12px
+.info-header
+    position: absolute
+    z-index: 100
+    top: 0
+    width: 100%
+    height: 60px
+    line-height: 60px
+    text-align: center
+    color: #fff
+    font-size: 11px
+    transition: all 0.5s linear
+    // border-1px(pink)
+    // &.change
+    // .init
+    //   span
+    //     // background: rgba(255,255,255,0.3)
+    //     // padding: 5px 15px
+    //     // border-radius: 2px
+    .second
+      position: absolute
+      z-index: 1000
+      width: 100%
+      height: 100%
+      text-align: center
+      font-size: 16px;
+      color: #000
+      background: #fff
+      border-1px(#ADADAD)
+      .icon
+        position: absolute
+        z-index: 10001
+        left: 0
+        width: 80px
+        color:#df2d2d
+      .current-movie
+        position: absolute
+        z-index: 1000
+        width: 100%
+        padding: 0 80px
+        top:0
+        left: 0
+        no-wrap()
 </style>
