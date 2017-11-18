@@ -144,6 +144,11 @@ export default {
     display: flex
     padding:20px 10px 10px 10px
     background: #f8f8f8
+    position: absolute
+    z-index: 1000
+    top: 0
+    left:0
+    width: 100%
     .input-con
       flex: 1
       height: 30px

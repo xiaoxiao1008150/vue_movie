@@ -30,7 +30,7 @@
                 <div class="im-con">
                   <router-link class="icon" tag="div" to="">
                     <i class="iconfont">&#xe625;</i>
-                    <img :src="movie.trailers ? movie.trailers[0].medium : '' ">
+                    <img :src="movie.trailers && movie.trailers.length ? movie.trailers[0].medium : '' ">
                   </router-link>
                 </div>
               </div>

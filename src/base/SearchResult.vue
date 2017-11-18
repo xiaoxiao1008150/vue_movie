@@ -1,13 +1,20 @@
 <template>
+<scrollv 
+:data="searchResult" 
+class="result-wrapper"
+>
   <div class="search-result">
     <div  v-if="searchResult.length">
       <display-box :searchResult="searchResult" class="no-padding"></display-box>
         <div class="s-result" v-show="length" @click="goToSearchR">查看{{length}}条影视剧结果</div>
+        <div style="height:60px"></div>
     </div>
   </div>
+</scrollv>
 </template>
 <script>
   import DisplayBox from 'base/DisplayBox'
+  import Scrollv from 'base/Scrollv'
   export default {
     props: {
       searchResult: {
@@ -31,16 +38,20 @@
       }
     },
     components: {
-      DisplayBox
+      DisplayBox,
+      Scrollv
     }
   }
 </script>
 <style scoped lang="stylus">
   @import "~common/stylus/mixin"
+  .result-wrapper
+    // padding-top: 60px
+    margin-top: 60px
   .no-padding
     padding-top: 0
   .search-result
-    padding: 0 20px
+    padding: 20px
     border-top: 1px ssolid #f6f6f6
     border-bottom: 1px ssolid #f6f6f6
     background: #fff

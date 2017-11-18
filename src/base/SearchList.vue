@@ -64,6 +64,7 @@ export default {
   @import "~common/stylus/mixin"
   .search-list
     // background: rgba(247, 247, 247, 0.23)
+    margin-top: 60px
     background: #fff
     padding: 0 20px
     font-size: 12px
