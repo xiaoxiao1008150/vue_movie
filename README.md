@@ -89,7 +89,7 @@ proxyTable: {
 
 #### 生产环境
 执行```npm run build```打包以后，豆瓣api的代理配置将不再起作用，因此在配置ngnix服务器的时候可以使用反向代理的配置，
-确保可以正确的请求到数据，进入nginx的配置文件中(环境ubuntun,nginx),文件路径为/www/nginx/nginx.conf,在http中添加如下设置
+确保可以正确的请求到数据，进入nginx的配置文件中(环境Ubuntu/14.04 64位,nginx/1.4.6),文件路径为/www/nginx/nginx.conf,在http中添加如下设置
 ```
 server {
     listen  8000;
