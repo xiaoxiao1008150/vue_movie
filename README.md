@@ -54,7 +54,7 @@ npm run dev
 
 使用flex布局进行移动端适配，用eslint进行代码规范检查
 
-使用localStorage搜索信息
+使用localStorage存储搜索信息
 
 ### 功能实现
 #### 上映电影部分
