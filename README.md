@@ -22,8 +22,8 @@ git clone https://github.com/buptsky/vue-douban-movie.git
 ```
 安装依赖
 ```
-cd vue-douban-movie
-npm install/yarn
+cd vue_movie
+npm install/yarn install
 ``` 
 运行
 ```

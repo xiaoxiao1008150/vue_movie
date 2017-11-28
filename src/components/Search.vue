@@ -6,9 +6,10 @@
 >
     <div class="container s-wrapper" ref="swrapper">
       <div class="search-box">
-        <div class="input-con">
+        <div class="input-con" @click="setFocus">
           <i class="iconfont icon-search">&#xe632;</i>
-          <input ref="query" v-model="query" class="box" placeholder="找影视剧"/>
+          <input ref="query" v-model="query" class="box" placeholder="找影视剧"
+           />
           <!-- <i class="iconfont icon-delete" v-show="hasfocus">&#xe605;</i> -->
         </div>
         <span class="cancel" @click="clear">取消</span>
@@ -59,7 +60,9 @@ export default {
     enter (el, done) {
       el.style.transition = 'transform .15s ease'
       done()
-      this.$refs.query.focus()
+      if (this.$refs.query) {
+        this.$refs.query.focus()
+      }
     },
     leave (el) {
       el.style.transform = 'translate3d(0,90%,0)'
@@ -78,6 +81,11 @@ export default {
     getInfo (info) {
       this.query = info
       this.reset = true
+    },
+    setFocus () {
+      if (this.$refs.query) {
+        this.$refs.query.focus()
+      }
     },
     searchInfo (key) {
       this.keyWord = key
