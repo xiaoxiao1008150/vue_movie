@@ -1,4 +1,4 @@
-# vue2.0 猫眼电影App
+# vue2.0 仿猫眼电影App
 
 ## 项目简介
 
@@ -10,7 +10,7 @@ api来源自豆瓣官方api，详情请戳[豆瓣电影api](https://developers.d
 
 #### PC访问
 
-[猫眼电影webapp](http://47.104.98.140:8000)
+[电影webapp](http://47.104.98.140:8000)
 
 打开浏览器进入开发者模式，先选择移动端视口, 观看效果更佳
 
@@ -54,7 +54,7 @@ npm run dev
 
 使用flex布局进行移动端适配，用eslint进行代码规范检查
 
-使用localStorage搜索信息
+使用localStorage存储搜索信息
 
 ### 功能实现
 #### 上映电影部分
