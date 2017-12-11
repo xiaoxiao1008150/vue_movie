@@ -12,7 +12,7 @@
             <div class="d_right">
               <div class="d_right_first">
                 <div class="d_title">{{item.title}}</div>
-                <div class="d_casts"><span>主演:{{item.casts[0].name}}</span></div>
+                <div class="d_casts"><span>主演:{{item.casts[0] ? item.casts[0].name : ''}}</span></div>
                 <div class="d_rating"><span>评分:{{item.rating.average===0 ?  '暂无评分' : item.rating.average}}</span></div>
               </div>
               <div class="d_right_second"><button>购票</button></div>
